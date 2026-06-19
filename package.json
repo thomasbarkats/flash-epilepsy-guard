@@ -1,0 +1,39 @@
+{
+  "name": "epileprev",
+  "version": "0.1.0",
+  "description": "Detects intense light flashes on screen (videos, GIFs) and covers the area with a preventive warning to protect photosensitive users.",
+  "private": true,
+  "main": "src/EpilepsyGuard.ts",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch",
+    "package": "npm run build && bestzip package.zip package/*"
+  },
+  "author": "Thomas BARKATS",
+  "license": "MIT",
+  "keywords": [
+    "epilepsy",
+    "photosensitive",
+    "flash-detection",
+    "accessibility",
+    "chrome-extension",
+    "wcag"
+  ],
+  "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.1",
+    "@babel/preset-typescript": "^8.0.1",
+    "@types/chrome": "^0.1.43",
+    "babel-loader": "^10.1.1",
+    "bestzip": "^3.0.1",
+    "copy-webpack-plugin": "^14.0.0",
+    "typescript": "^6.0.3",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3"
+  },
+  "overrides": {
+    "@babel/preset-modules": {
+      "@babel/core": "$@babel/core"
+    }
+  }
+}

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --accent: #f6d365;
+      --accent-text: #b88a13;
+      --bg: #ffffff;
+      --fg: #1f2430;
+      --muted: #8a90a2;
+      --rail: #e5e7eb;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --accent-text: #f6d365;
+        --bg: #1c1d22;
+        --fg: #ecedf1;
+        --muted: #8a90a2;
+        --rail: #34363d;
+      }
+    }
+    body.disabled { --accent: #9ca3af; --accent-text: #9ca3af; }
+
+    * { box-sizing: border-box; }
+    body {
+      width: 248px;
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+    }
+    .subtitle {
+      margin: 0 0 16px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .subtitle::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin-right: 7px;
+      border-radius: 50%;
+      background: #ffb020;
+      vertical-align: middle;
+    }
+    h1 {
+      margin: 0 0 18px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.55;
+    }
+
+    .slider { position: relative; height: 20px; }
+    .rail, .fill {
+      position: absolute;
+      top: 50%;
+      height: 4px;
+      border-radius: 2px;
+      transform: translateY(-50%);
+    }
+    .rail { left: 12.5%; right: 12.5%; background: var(--rail); }
+    .fill {
+      left: 12.5%;
+      width: 0;
+      background: var(--accent);
+      transition: width 0.18s ease, background 0.18s ease;
+    }
+    .stops {
+      position: absolute;
+      inset: 0;
+      display: flex;
+    }
+    .stop {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+    .stop::after {
+      content: "";
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--rail);
+      transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .stop.filled::after { background: var(--accent); }
+    .stop.active::after {
+      transform: scale(1.45);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent);
+    }
+
+    .labels {
+      display: flex;
+      margin-top: 12px;
+    }
+    .labels span {
+      flex: 1;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.18s ease;
+    }
+    .labels span.active { color: var(--accent-text); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="subtitle" id="subtitle"></div>
+  <h1 id="heading"></h1>
+  <div class="slider">
+    <div class="rail"></div>
+    <div class="fill" id="fill"></div>
+    <div class="stops" id="stops">
+      <button class="stop" type="button" data-level="0"></button>
+      <button class="stop" type="button" data-level="1"></button>
+      <button class="stop" type="button" data-level="2"></button>
+      <button class="stop" type="button" data-level="3"></button>
+    </div>
+  </div>
+  <div class="labels" id="labels">
+    <span data-level="0"></span>
+    <span data-level="1"></span>
+    <span data-level="2"></span>
+    <span data-level="3"></span>
+  </div>
+  <script src="popup.bundle.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "appName": {
+    "message": "Epilep'rev - Flash & Epilepsy Guard"
+  },
+  "appDesc": {
+    "message": "Detects intense light flashes on screen (videos, GIFs) and covers the area with a preventive warning to protect photosensitive users."
+  },
+  "appSubtitle": {
+    "message": "Flash & Epilepsy Guard"
+  },
+  "actionTitle": {
+    "message": "Epilep'rev - click to enable/disable protection"
+  },
+  "overlayTitle": {
+    "message": "Flashing content hidden"
+  },
+  "overlayText": {
+    "message": "Potentially seizure-inducing flashes were detected and this area has been covered for your safety."
+  },
+  "overlayHint": {
+    "message": "The content will reappear automatically once the flashing stops."
+  },
+  "firstAidButton": {
+    "message": "Seizure first aid"
+  },
+  "firstAidUrl": {
+    "message": "https://www.epilepsy.com/recognition/seizure-first-aid"
+  },
+  "showAnyway": {
+    "message": "Show anyway"
+  },
+  "popupHeading": {
+    "message": "Protection level"
+  },
+  "levelOff": {
+    "message": "Off"
+  },
+  "levelLow": {
+    "message": "Low"
+  },
+  "levelMedium": {
+    "message": "Medium"
+  },
+  "levelHigh": {
+    "message": "High"
+  },
+  "badgeOn": {
+    "message": "ON"
+  },
+  "badgeOff": {
+    "message": "OFF"
+  }
+}
