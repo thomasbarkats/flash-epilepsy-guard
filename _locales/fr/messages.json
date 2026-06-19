@@ -1,0 +1,53 @@
+{
+  "appName": {
+    "message": "Epilep'rev - Protection anti-flashs & épilepsie"
+  },
+  "appDesc": {
+    "message": "Détecte les flashs lumineux intenses à l'écran (vidéos, GIF) et masque la zone concernée par un avertissement préventif pour protéger les personnes photosensibles."
+  },
+  "appSubtitle": {
+    "message": "Protection anti-flashs & épilepsie"
+  },
+  "actionTitle": {
+    "message": "Epilep'rev - cliquer pour activer/désactiver la protection"
+  },
+  "overlayTitle": {
+    "message": "Contenu clignotant masqué"
+  },
+  "overlayText": {
+    "message": "Des flashs potentiellement épileptogènes ont été détectés ; cette zone a été masquée pour votre sécurité."
+  },
+  "overlayHint": {
+    "message": "Le contenu réapparaîtra automatiquement une fois les flashs terminés."
+  },
+  "firstAidButton": {
+    "message": "Que faire en cas de crise"
+  },
+  "firstAidUrl": {
+    "message": "https://www.epilepsie-france.fr/"
+  },
+  "showAnyway": {
+    "message": "Afficher quand même"
+  },
+  "popupHeading": {
+    "message": "Niveau de protection"
+  },
+  "levelOff": {
+    "message": "Désactivé"
+  },
+  "levelLow": {
+    "message": "Faible"
+  },
+  "levelMedium": {
+    "message": "Moyen"
+  },
+  "levelHigh": {
+    "message": "Élevé"
+  },
+  "badgeOn": {
+    "message": "ON"
+  },
+  "badgeOff": {
+    "message": "OFF"
+  }
+}
