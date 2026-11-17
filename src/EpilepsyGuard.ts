@@ -1,5 +1,6 @@
-import { DEBUG, DEFAULT_SETTINGS, DETECTOR_CONFIGS, LOG_TITLE, RESCAN_INTERVAL_MS, STORAGE_KEY } from './config/constants';
-import { Settings } from './types';
+import { DEBUG, DEFAULT_SETTINGS, DETECTOR_CONFIGS, LOG_TITLE, MUTATION_SCAN_INTERVAL_MS, RESCAN_INTERVAL_MS, STORAGE_KEY } from './config/constants';
+import { loadSettings, parseSettings } from './settings';
+import type { Settings } from './types';
 import { MediaElement, findMediaElements, isMonitorable } from './utils/dom.utils';
 import { MediaMonitor } from './core/MediaMonitor';
 
@@ -13,6 +14,7 @@ class EpilepsyGuard {
   private intersectionObserver!: IntersectionObserver;
   private mutationObserver!: MutationObserver;
   private rafId = 0;
+  private scanTimer = 0;
   private running = false;
   private lastScanAt = 0;
 
@@ -25,10 +27,6 @@ class EpilepsyGuard {
       { threshold: 0.01 },
     );
     this.mutationObserver = new MutationObserver(() => this.scheduleScan());
-    this.mutationObserver.observe(document.documentElement, {
-      childList: true,
-      subtree: true,
-    });
 
     if (this.settings.enabled) {
       this.start();
@@ -46,6 +44,10 @@ class EpilepsyGuard {
       return;
     }
     this.running = true;
+    this.mutationObserver.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+    });
     this.scan();
     this.loop();
   }
@@ -53,11 +55,15 @@ class EpilepsyGuard {
   private stop(): void {
     this.running = false;
     cancelAnimationFrame(this.rafId);
+    clearTimeout(this.scanTimer);
+    this.scanTimer = 0;
+    this.scanScheduled = false;
     for (const monitor of this.monitors.values()) {
       monitor.destroy();
     }
     this.monitors.clear();
     this.intersectionObserver.disconnect();
+    this.mutationObserver.disconnect();
   }
 
   private loop = (): void => {
@@ -90,10 +96,15 @@ class EpilepsyGuard {
       return;
     }
     this.scanScheduled = true;
-    requestAnimationFrame(() => {
+    const elapsed = performance.now() - this.lastScanAt;
+    const delay = Math.max(0, MUTATION_SCAN_INTERVAL_MS - elapsed);
+    this.scanTimer = window.setTimeout(() => {
       this.scanScheduled = false;
-      this.scan();
-    });
+      this.scanTimer = 0;
+      if (this.running) {
+        this.scan();
+      }
+    }, delay);
   }
 
   private scan(): void {
@@ -112,7 +123,10 @@ class EpilepsyGuard {
         continue;
       }
       present.add(el);
-      if (!this.monitors.has(el)) {
+      const existing = this.monitors.get(el);
+      if (existing) {
+        existing.refresh();
+      } else {
         this.add(el);
       }
     }
@@ -142,7 +156,10 @@ class EpilepsyGuard {
 
   private onIntersection(entries: IntersectionObserverEntry[]): void {
     for (const entry of entries) {
-      const monitor = this.monitors.get(entry.target as MediaElement);
+      if (!(entry.target instanceof HTMLVideoElement || entry.target instanceof HTMLImageElement)) {
+        continue;
+      }
+      const monitor = this.monitors.get(entry.target);
       if (monitor) {
         monitor.visible = entry.isIntersecting;
       }
@@ -154,8 +171,7 @@ class EpilepsyGuard {
       if (area !== 'local' || !changes[STORAGE_KEY]) {
         return;
       }
-      const newValue = (changes[STORAGE_KEY].newValue ?? {}) as Partial<Settings>;
-      const next: Settings = { ...DEFAULT_SETTINGS, ...newValue };
+      const next = parseSettings(changes[STORAGE_KEY].newValue);
       const wasEnabled = this.settings.enabled;
       const sensitivityChanged = next.sensitivity !== this.settings.sensitivity;
       this.settings = next;
@@ -170,15 +186,6 @@ class EpilepsyGuard {
         this.start();
       }
     });
-  }
-}
-
-async function loadSettings(): Promise<Settings> {
-  try {
-    const stored = await chrome.storage.local.get(STORAGE_KEY);
-    return { ...DEFAULT_SETTINGS, ...(stored[STORAGE_KEY] ?? {}) };
-  } catch {
-    return DEFAULT_SETTINGS;
   }
 }
 

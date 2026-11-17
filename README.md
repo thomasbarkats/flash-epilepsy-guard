@@ -6,13 +6,13 @@
 
 A Chrome (Chromium browsers) extension that watches the screen for intense light flashes — typically in `<video>` players (YouTube and others) or animated `<img>` GIFs — and covers the offending area with a preventive warning while the flashing lasts, removing it once the content is safe again. Built to reduce exposure for photosensitive users.
 
-It runs entirely in the background with no popup window: clicking the toolbar icon toggles protection on/off (the badge shows `ON`/`OFF`).
+It runs as a content script on web pages. The toolbar popup selects the protection level; the badge shows `ON`/`OFF`.
 
 ## 📋 Features
 
-- **Flash Detection**: Analyses visible `<video>` and animated GIF regions in real time
+- **Flash Detection**: Analyses visible, canvas-readable `<video>`, GIF, APNG, and YouTube animated-WebP preview regions in real time
 - **Preventive Overlay**: Covers only the flashing element, with a *Show anyway* button
-- **Standards-Based**: Thresholds follow WCAG 2.3.1 and the Harding flash analysis, including saturated-red flashing
+- **WCAG-informed**: Uses the WCAG 2.3.1 luminance, frequency, and saturated-red criteria as the basis for a real-time heuristic
 - **Sensitivity Levels**: Low / medium / high presets to trade false positives for protection
 - **Privacy-Focused**: Works entirely client-side with no data collection
 
@@ -27,12 +27,12 @@ After installation:
 
 ## 🔬 How it works
 
-For every visible, sufficiently large `<video>` / `<img>` element:
+For every visible, sufficiently large `<video>` / known animated `<img>` element:
 
 1. **Sampling**: the element is redrawn each animation frame onto a tiny `gridSize × gridSize` canvas (default 20×20); downscaling box-filters each region into one averaged sample per cell
-2. **Per-cell luminance**: each cell's relative luminance is computed (sRGB → linear, Rec.709 weights), and saturated-red pixels are flagged separately
-3. **Flash counting**: per cell, a sliding 1 s window counts luminance transitions — a change of ≥10% of max luminance with the darker frame below 0.80; ~6 transitions/s matches the WCAG "more than 3 flashes per second" limit
-4. **Spatial criterion**: the area is flagged as dangerous only when ≥25% of cells are individually flashing (the Harding / WCAG area rule), which keeps small UI animations from triggering false positives
+2. **Per-cell luminance and colour**: each cell's relative luminance is computed (sRGB → linear, Rec.709 weights); red transitions use CIE 1976 UCS chromaticity
+3. **Flash counting**: per cell, a sliding 1 s window counts luminance transitions — a change of ≥10% of max luminance with the darker frame below 0.80; 7 transitions are the first count above WCAG’s allowance of three flashes per second
+4. **Spatial criterion**: a configurable share of cells must transition in the same direction within 60 ms, which filters incoherent motion and small UI animations
 5. **Overlay**: a warning panel covers the element's bounding box, kept up via a short cooldown (hysteresis) so it does not flicker
 
 Thresholds are tunable per sensitivity preset in [`src/config/constants.ts`](src/config/constants.ts).
@@ -48,7 +48,7 @@ This project uses TypeScript, Webpack, and the Chrome Extension API.
 ### Prerequisites
 
 - Node.js (v14 or higher)
-- npm or yarn
+- pnpm 11 (Corepack recommended)
 - Chromium based browser supporting extensions
 
 ### Setup
@@ -61,12 +61,12 @@ cd epileprev
 
 2. Install dependencies
 ```bash
-npm install
+pnpm install --frozen-lockfile
 ```
 
 3. Build the project
 ```bash
-npm run build
+pnpm run build
 ```
 
 4. Load the extension in Chrome
@@ -76,13 +76,13 @@ npm run build
 
 5. Start development with hot-reload
 ```bash
-npm run watch
+pnpm run watch
 ```
 
 ## Limitations
 
 - **Cross-origin / DRM media taints the canvas**, so its pixels cannot be read; the affected element is detected and silently skipped. Most YouTube playback (MSE/blob, non-DRM) is readable, some protected streams are not.
-- Detection is heuristic and **not a medical device**. It aims to reduce, not guarantee elimination of, exposure to provocative flashing.
+- Detection is heuristic and **not a medical device**. It aims to reduce, not guarantee elimination of, exposure to provocative flashing. In particular, the grid and spatial synchronisation are a practical approximation, not an implementation of a certified Harding Flash Pattern Analysis test.
 - Analysis runs at the display refresh rate (≈60 Hz via `requestAnimationFrame`), so flashing faster than ~30 Hz may be undersampled.
 
 ## Contributing

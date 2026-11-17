@@ -2,6 +2,7 @@ import { t } from '../utils/i18n';
 
 const OVERLAY_CLASS = 'epileprev-overlay';
 const STYLE_ID = 'epileprev-style';
+const OVERLAY_Z_INDEX = 2_147_483_647;
 
 // Sizes scale with --m (the element's smaller dimension, set from JS) but stay
 // bounded by clamp(), so the overlay reads well from thumbnails to full screen
@@ -23,6 +24,9 @@ const CSS = `
   border-radius: 6px;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   overflow: hidden;
+  /* Do not steal hover from the protected media: some sites (including
+     YouTube previews) stop and restart animation on mouseleave/mouseenter. */
+  pointer-events: none;
   animation: epileprev-fade 120ms ease-out;
 }
 @keyframes epileprev-fade { from { opacity: 0; } to { opacity: 1; } }
@@ -46,6 +50,8 @@ const CSS = `
   border: 0;
   border-radius: 4px;
   cursor: pointer;
+  /* Keep the explicit opt-out and first-aid controls usable. */
+  pointer-events: auto;
   text-decoration: none;
 }
 .${OVERLAY_CLASS}__btn:hover { background: #ffc24d; }
@@ -80,10 +86,13 @@ export class WarningOverlay {
     this.onReveal = onReveal;
   }
 
-  show(rect: Rect, zIndex: number): void {
+  show(rect: Rect): void {
     const el = this.build();
     if (!this.visible) {
-      el.style.zIndex = String(zIndex);
+      // The overlay is appended to the page root. It must sit above media
+      // layers created by sites (notably YouTube hover previews), otherwise a
+      // dangerous animation can paint over a correctly detected warning.
+      el.style.zIndex = String(OVERLAY_Z_INDEX);
       document.body.appendChild(el);
       this.visible = true;
     }
