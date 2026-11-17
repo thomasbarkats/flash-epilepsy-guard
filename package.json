@@ -6,13 +6,17 @@
   "packageManager": "pnpm@11.5.2",
   "main": "src/EpilepsyGuard.ts",
   "scripts": {
-    "typecheck": "tsc --noEmit",
     "build": "pnpm run typecheck && webpack --config webpack.config.js",
     "watch": "webpack --config webpack.config.js --watch",
-    "package": "pnpm run build && bestzip package.zip package/*"
+    "package": "pnpm run build && bestzip package.zip package/*",
+    "commit": "format-commit"
   },
   "author": "Thomas BARKATS",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomasbarkats/epileprev"
+  },
   "keywords": [
     "epilepsy",
     "photosensitive",
@@ -21,6 +25,9 @@
     "chrome-extension",
     "wcag"
   ],
+  "bugs": {
+    "url": "https://github.com/thomasbarkats/epileprev/issues"
+  },
   "devDependencies": {
     "@babel/core": "^8.0.1",
     "@babel/preset-env": "^8.0.1",
@@ -29,6 +36,7 @@
     "babel-loader": "^10.1.1",
     "bestzip": "^3.0.1",
     "copy-webpack-plugin": "^14.0.0",
+    "format-commit": "^2.0.0",
     "typescript": "^6.0.3",
     "webpack": "^5.107.2",
     "webpack-cli": "^7.0.3"
