@@ -1,12 +1,12 @@
 {
   "name": "flash-epilepsy-guard",
   "version": "1.0.0",
-  "description": "Detects intense light flashes on screen (videos, GIFs) and covers the area with a preventive warning to protect photosensitive users.",
+  "description": "Detects intense light flashes on screen (videos,GIFs) and covers the area with a preventive warning to protect photosensitive users.",
   "private": true,
   "packageManager": "pnpm@11.5.2",
   "main": "src/EpilepsyGuard.ts",
   "scripts": {
-    "build": "pnpm run typecheck && webpack --config webpack.config.js",
+    "build": "tsc --noEmit && webpack --config webpack.config.js",
     "watch": "webpack --config webpack.config.js --watch",
     "package": "pnpm run build && bestzip package.zip package/*",
     "commit": "format-commit"

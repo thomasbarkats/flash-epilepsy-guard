@@ -3,7 +3,7 @@
   "name": "Flash and Epilepsy Guard",
   "version": "1.0.0",
   "author": "Thomas BARKATS",
-  "description": "Detects intense light flashes on screen (videos, GIFs) and covers the area with a preventive warning to protect photosensitive users.",
+  "description": "Detects intense light flashes on screen (videos,GIFs) and covers the area with a preventive warning to protect photosensitive users.",
   "default_locale": "en",
   "homepage_url": "https://github.com/thomasbarkats/flash-epilepsy-guard",
   "permissions": [
