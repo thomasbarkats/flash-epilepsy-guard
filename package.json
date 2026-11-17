@@ -1,13 +1,15 @@
 {
   "name": "epileprev",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Detects intense light flashes on screen (videos, GIFs) and covers the area with a preventive warning to protect photosensitive users.",
   "private": true,
+  "packageManager": "pnpm@11.5.2",
   "main": "src/EpilepsyGuard.ts",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "typecheck": "tsc --noEmit",
+    "build": "pnpm run typecheck && webpack --config webpack.config.js",
     "watch": "webpack --config webpack.config.js --watch",
-    "package": "npm run build && bestzip package.zip package/*"
+    "package": "pnpm run build && bestzip package.zip package/*"
   },
   "author": "Thomas BARKATS",
   "license": "MIT",
