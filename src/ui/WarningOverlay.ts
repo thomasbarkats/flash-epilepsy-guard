@@ -1,7 +1,7 @@
 import { t } from '../utils/i18n';
 
-const OVERLAY_CLASS = 'epileprev-overlay';
-const STYLE_ID = 'epileprev-style';
+const OVERLAY_CLASS = 'fl-ep-guard-overlay';
+const STYLE_ID = 'fl-ep-guard-style';
 const OVERLAY_Z_INDEX = 2_147_483_647;
 
 // Sizes scale with --m (the element's smaller dimension, set from JS) but stay
@@ -27,9 +27,9 @@ const CSS = `
   /* Do not steal hover from the protected media: some sites (including
      YouTube previews) stop and restart animation on mouseleave/mouseenter. */
   pointer-events: none;
-  animation: epileprev-fade 120ms ease-out;
+  animation: fl-ep-guard-fade 120ms ease-out;
 }
-@keyframes epileprev-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fl-ep-guard-fade { from { opacity: 0; } to { opacity: 1; } }
 .${OVERLAY_CLASS}__icon { font-size: clamp(20px, calc(var(--m) * 0.22), 72px); line-height: 1; color: #ffb020; }
 .${OVERLAY_CLASS}__title { font-size: clamp(13px, calc(var(--m) * 0.07), 24px); font-weight: 700; }
 .${OVERLAY_CLASS}__text { font-size: clamp(11px, calc(var(--m) * 0.045), 16px); max-width: 95%; opacity: 0.85; }

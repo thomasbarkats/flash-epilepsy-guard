@@ -1,7 +1,7 @@
 # Epilep'rev
 
-[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=google-chrome&logoColor=white)](https://github.com/thomasbarkats/epileprev)
-[![Version](https://img.shields.io/badge/Version-0.1.0-blue)](https://github.com/thomasbarkats/epileprev)
+[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=google-chrome&logoColor=white)](https://github.com/thomasbarkats/flash-epilepsy-guard)
+[![Version](https://img.shields.io/badge/Version-0.1.0-blue)](https://github.com/thomasbarkats/flash-epilepsy-guard)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A Chrome (Chromium browsers) extension that watches the screen for intense light flashes — typically in `<video>` players (YouTube and others) or animated `<img>` GIFs — and covers the offending area with a preventive warning while the flashing lasts, removing it once the content is safe again. Built to reduce exposure for photosensitive users.
@@ -55,8 +55,8 @@ This project uses TypeScript, Webpack, and the Chrome Extension API.
 
 1. Clone the repository
 ```bash
-git clone https://github.com/thomasbarkats/epileprev.git
-cd epileprev
+git clone https://github.com/thomasbarkats/flash-epilepsy-guard.git
+cd flash-epilepsy-guard
 ```
 
 2. Install dependencies

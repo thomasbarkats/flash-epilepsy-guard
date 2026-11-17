@@ -10,7 +10,7 @@ export const DEBUG = false;
 // expose users to the beginning of genuinely flashing media.
 export const WARMUP_MS = 150;
 
-export const STORAGE_KEY = 'epileprev:settings';
+export const STORAGE_KEY = 'fl-ep-guard:settings';
 
 export const DEFAULT_SETTINGS: Settings = {
   enabled: true,

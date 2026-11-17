@@ -1,5 +1,5 @@
 {
-  "name": "epileprev",
+  "name": "flash-epilepsy-guard",
   "version": "1.0.0",
   "description": "Detects intense light flashes on screen (videos, GIFs) and covers the area with a preventive warning to protect photosensitive users.",
   "private": true,
@@ -15,7 +15,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/thomasbarkats/epileprev"
+    "url": "https://github.com/thomasbarkats/flash-epilepsy-guard"
   },
   "keywords": [
     "epilepsy",
@@ -26,7 +26,7 @@
     "wcag"
   ],
   "bugs": {
-    "url": "https://github.com/thomasbarkats/epileprev/issues"
+    "url": "https://github.com/thomasbarkats/flash-epilepsy-guard/issues"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",

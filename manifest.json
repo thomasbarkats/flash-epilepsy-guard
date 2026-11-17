@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "__MSG_appName__",
-  "version": "0.1.0",
+  "name": "Flash and Epilepsy Guard",
+  "version": "1.0.0",
   "author": "Thomas BARKATS",
-  "description": "__MSG_appDesc__",
+  "description": "Detects intense light flashes on screen (videos, GIFs) and covers the area with a preventive warning to protect photosensitive users.",
   "default_locale": "en",
+  "homepage_url": "https://github.com/thomasbarkats/flash-epilepsy-guard",
   "permissions": [
     "storage"
   ],
@@ -23,7 +24,7 @@
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     },
-    "default_title": "__MSG_actionTitle__",
+    "default_title": "Flash & Epilepsy Guard",
     "default_popup": "popup.html"
   },
   "icons": {
