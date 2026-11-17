@@ -1,10 +1,12 @@
 import { MediaElement } from '../utils/dom.utils';
-import { isSaturatedRed, relativeLuminance } from '../utils/color.utils';
+import { chromaticity, relativeLuminance } from '../utils/color.utils';
 
 export interface SampledFrame {
   // Per cell, length gridSize*gridSize. red[i] is 1 for a saturated-red cell
   luminance: Float32Array;
   red: Uint8Array;
+  chromaU: Float32Array;
+  chromaV: Float32Array;
 }
 
 // Downsamples a media element to a grid canvas and reads back per-cell stats.
@@ -18,6 +20,8 @@ export class FrameSampler {
   private ctx?: CanvasRenderingContext2D;
   private luminance?: Float32Array;
   private red?: Uint8Array;
+  private chromaU?: Float32Array;
+  private chromaV?: Float32Array;
   private tainted = false;
 
   constructor(gridSize: number) {
@@ -39,14 +43,19 @@ export class FrameSampler {
       const { data } = ctx.getImageData(0, 0, this.grid, this.grid);
       const luminance = this.luminance!;
       const red = this.red!;
+      const chromaU = this.chromaU!;
+      const chromaV = this.chromaV!;
       for (let i = 0, p = 0; i < luminance.length; i++, p += 4) {
         const r = data[p];
         const g = data[p + 1];
         const b = data[p + 2];
         luminance[i] = relativeLuminance(r, g, b);
-        red[i] = isSaturatedRed(r, g, b) ? 1 : 0;
+        const color = chromaticity(r, g, b);
+        red[i] = color.saturatedRed ? 1 : 0;
+        chromaU[i] = color.u;
+        chromaV[i] = color.v;
       }
-      return { luminance, red };
+      return { luminance, red, chromaU, chromaV };
     } catch {
       // SecurityError from a tainted canvas
       this.tainted = true;
@@ -67,6 +76,8 @@ export class FrameSampler {
     }
     this.luminance = new Float32Array(this.grid * this.grid);
     this.red = new Uint8Array(this.grid * this.grid);
+    this.chromaU = new Float32Array(this.grid * this.grid);
+    this.chromaV = new Float32Array(this.grid * this.grid);
     this.ctx = ctx;
     return ctx;
   }

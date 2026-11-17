@@ -5,10 +5,10 @@ export const LOG_TITLE = "Epilep'rev";
 // Temporary: logs monitor/taint/trigger events to the console for diagnosis
 export const DEBUG = false;
 
-// Per-element grace period when sampling starts: load/layout transients (tiles,
-// fade-ins, reflow) briefly look like synchronized flashing, so we prime state
-// but suppress detection during this window
-export const WARMUP_MS = 600;
+// Briefly prime per-cell state at startup. The flash-rate and synchronisation
+// tests already reject a simple fade/reflow, so a long grace period would only
+// expose users to the beginning of genuinely flashing media.
+export const WARMUP_MS = 150;
 
 export const STORAGE_KEY = 'epileprev:settings';
 
@@ -32,13 +32,17 @@ export const STATIC_IMAGE_TIMEOUT_MS = 4000;
 // mutation (e.g. YouTube's hover-preview player, hidden then sized on hover)
 export const RESCAN_INTERVAL_MS = 500;
 
+// A busy single-page app can mutate its DOM on every rendering frame. Coalesce
+// those notifications instead of repeatedly walking the full document.
+export const MUTATION_SCAN_INTERVAL_MS = 100;
+
 // A single flash edge may span a couple of sampled frames; transitions are
 // accumulated over this window before deciding whether they were synchronized
 export const EDGE_WINDOW_MS = 60;
 
 // WCAG general flash threshold: >=10% relative luminance change with the darker
 // image below 0.80, >3 times/s, over >=25% of the area. We require those cells
-// to flip *in sync* (the edgesForFlash count: 6 edges = 3 flashes/s), which is
+// to flip *in sync* (the edgesForFlash count: 7 edges = 3.5 flashes/s), which is
 // what separates real flashing from incoherent motion (e.g. moving objects)
 const BASE_CONFIG: DetectorConfig = {
   gridSize: 20,
@@ -46,8 +50,10 @@ const BASE_CONFIG: DetectorConfig = {
   darkLuminanceMax: 0.8,
   windowMs: 1000,
   syncAreaRatio: 0.22,
-  edgesForFlash: 6,
-  redEdgesForFlash: 6,
+  // Seven transitions are 3.5 flashes: the first count above WCAG's
+  // allowance of three flashes in any one-second period.
+  edgesForFlash: 7,
+  redEdgesForFlash: 7,
 };
 
 // "high" reacts to weaker/smaller/slower flashing (more protective, more false
@@ -67,7 +73,7 @@ export const DETECTOR_CONFIGS: Record<Sensitivity, DetectorConfig> = {
     ...BASE_CONFIG,
     luminanceThreshold: 0.08,
     syncAreaRatio: 0.15,
-    edgesForFlash: 4,
-    redEdgesForFlash: 4,
+    edgesForFlash: 5,
+    redEdgesForFlash: 5,
   },
 };
