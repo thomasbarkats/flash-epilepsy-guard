@@ -1,15 +1,11 @@
-import { DEFAULT_SETTINGS, STORAGE_KEY } from './config/constants';
-import { Sensitivity, Settings } from './types';
+import { STORAGE_KEY } from './config/constants';
+import { loadSettings } from './settings';
+import type { Sensitivity, Settings } from './types';
 import { t } from './utils/i18n';
 
 // Slider stop 0 is "off"; stops 1..3 map to these sensitivities
-const ORDER: Sensitivity[] = ['low', 'medium', 'high'];
-const LABEL_KEYS = ['levelOff', 'levelLow', 'levelMedium', 'levelHigh'];
-
-async function load(): Promise<Settings> {
-  const stored = await chrome.storage.local.get(STORAGE_KEY);
-  return { ...DEFAULT_SETTINGS, ...(stored[STORAGE_KEY] ?? {}) };
-}
+const ORDER = ['low', 'medium', 'high'] as const satisfies readonly Sensitivity[];
+const LABEL_KEYS = ['levelOff', 'levelLow', 'levelMedium', 'levelHigh'] as const;
 
 function toIndex(s: Settings): number {
   return s.enabled ? ORDER.indexOf(s.sensitivity) + 1 : 0;
@@ -17,9 +13,11 @@ function toIndex(s: Settings): number {
 
 // Off keeps the previous sensitivity so re-enabling restores the same level
 function toSettings(index: number, prev: Settings): Settings {
-  return index === 0
-    ? { ...prev, enabled: false }
-    : { enabled: true, sensitivity: ORDER[index - 1] };
+  if (index === 0) {
+    return { ...prev, enabled: false };
+  }
+  const sensitivity = ORDER[index - 1];
+  return sensitivity ? { enabled: true, sensitivity } : prev;
 }
 
 async function main(): Promise<void> {
@@ -30,7 +28,7 @@ async function main(): Promise<void> {
   labels.forEach((el, i) => (el.textContent = t(LABEL_KEYS[i])));
 
   const fill = document.getElementById('fill')!;
-  let settings = await load();
+  let settings = await loadSettings();
 
   const reflect = (index: number): void => {
     fill.style.width = `${index * 25}%`;
