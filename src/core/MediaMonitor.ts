@@ -1,9 +1,11 @@
-import { DetectorConfig } from '../types';
 import { DEBUG, LOG_TITLE, OVERLAY_COOLDOWN_MS, STATIC_IMAGE_TIMEOUT_MS, WARMUP_MS } from '../config/constants';
-import { MediaElement, hasDecodableFrame } from '../utils/dom.utils';
 import { FrameSampler } from './FrameSampler';
 import { FlashDetector } from './FlashDetector';
-import { Rect, WarningOverlay } from '../ui/WarningOverlay';
+import { hasDecodableFrame } from '../utils/dom.utils';
+import { WarningOverlay } from '../ui/WarningOverlay';
+import type { MediaElement } from '../utils/dom.utils';
+import type { Rect } from '../ui/WarningOverlay';
+import type { DetectorConfig } from '../types';
 
 // Owns the full detection pipeline for one media element: sampling, flash
 // detection, and the warning overlay with its show/hide hysteresis

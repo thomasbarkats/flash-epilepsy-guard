@@ -1,8 +1,9 @@
 import { DEBUG, DEFAULT_SETTINGS, DETECTOR_CONFIGS, LOG_TITLE, MUTATION_SCAN_INTERVAL_MS, RESCAN_INTERVAL_MS, STORAGE_KEY } from './config/constants';
 import { loadSettings, parseSettings } from './settings';
-import type { Settings } from './types';
-import { MediaElement, findMediaElements, isMonitorable } from './utils/dom.utils';
+import { findMediaElements, isMonitorable } from './utils/dom.utils';
 import { MediaMonitor } from './core/MediaMonitor';
+import type { MediaElement } from './utils/dom.utils';
+import type { Settings } from './types';
 
 // Discovers media elements, tracks their visibility, and drives one shared
 // animation-frame loop that ticks every monitor

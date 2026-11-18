@@ -1,6 +1,6 @@
-import { AnalysisResult, DetectorConfig } from '../types';
 import { EDGE_WINDOW_MS } from '../config/constants';
-import { SampledFrame } from './FrameSampler';
+import type { SampledFrame } from './FrameSampler';
+import type { AnalysisResult, DetectorConfig } from '../types';
 
 // Detects *coherent* flashing rather than mere busy-ness. A real seizure-risk
 // flash makes a large area brighten and darken together, in rhythm; incoherent

@@ -1,5 +1,5 @@
-import { MediaElement } from '../utils/dom.utils';
 import { chromaticity, relativeLuminance } from '../utils/color.utils';
+import type { MediaElement } from '../utils/dom.utils';
 
 export interface SampledFrame {
   // Per cell, length gridSize*gridSize. red[i] is 1 for a saturated-red cell

@@ -1,4 +1,4 @@
-import { DetectorConfig, Sensitivity, Settings } from '../types';
+import type { DetectorConfig, Sensitivity, Settings } from '../types';
 
 export const LOG_TITLE = "Epilep'rev";
 
